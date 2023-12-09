@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -133,23 +134,22 @@ fun BillForm(modifier: Modifier = Modifier, onValueChange: (Float) -> Unit = {})
                     keyboardController?.hide()
                 }
             )
-            SplitBill{
-                splitAmountState.value =  it
-                onValueChange((totalBillState.value.toFloat() + tipAmountState.value)/splitAmountState.value)
-            }
-            TipValue(tipAmountState.value)
-            PercentageSplit{
-                if( totalBillState.value.isNotEmpty() && totalBillState.value.toInt() > 1){
-                    tipAmountState.value = (it.toInt() * totalBillState.value.toInt()) / 100
+
+            if(validState){
+                SplitBill{
+                    splitAmountState.value =  it
                     onValueChange((totalBillState.value.toFloat() + tipAmountState.value)/splitAmountState.value)
                 }
+                TipValue(tipAmountState.value)
+                PercentageSplit{
+                    if( totalBillState.value.isNotEmpty() && totalBillState.value.toInt() > 1){
+                        tipAmountState.value = (it.toInt() * totalBillState.value.toInt()) / 100
+                        onValueChange((totalBillState.value.toFloat() + tipAmountState.value)/splitAmountState.value)
+                    }
+                }
+            } else{
+                Box{}
             }
-//            if(validState){
-//                SplitBill()
-//            } else{
-//                Box {
-//                }
-//            }
 
         }
     }
